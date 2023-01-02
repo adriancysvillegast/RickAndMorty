@@ -9,10 +9,14 @@ import UIKit
 
 class HomeViewController: UIViewController {
 
+    // MARK: - properties
+    
+    // MARK: - lifeCicle
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
+    // MARK: - setupView
 
 }
 
