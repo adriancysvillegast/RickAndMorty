@@ -56,6 +56,7 @@
 		0963D97E296306CB00203BE4 /* RickAndMortyAPP */ = {
 			isa = PBXGroup;
 			children = (
+				0963D99329630CAE00203BE4 /* App */,
 				0963D97F296306CB00203BE4 /* AppDelegate.swift */,
 				0963D981296306CB00203BE4 /* SceneDelegate.swift */,
 				0963D983296306CB00203BE4 /* ViewController.swift */,
@@ -65,6 +66,45 @@
 				0963D98D296306D000203BE4 /* Info.plist */,
 			);
 			path = RickAndMortyAPP;
+			sourceTree = "<group>";
+		};
+		0963D99329630CAE00203BE4 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				0963D99629630CD000203BE4 /* Shared */,
+				0963D99429630CBC00203BE4 /* Utils */,
+				0963D99729630D3E00203BE4 /* Moduls */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		0963D99429630CBC00203BE4 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		0963D99629630CD000203BE4 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				0963D99829630E6D00203BE4 /* Service */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		0963D99729630D3E00203BE4 /* Moduls */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Moduls;
+			sourceTree = "<group>";
+		};
+		0963D99829630E6D00203BE4 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
