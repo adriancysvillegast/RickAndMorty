@@ -21,7 +21,7 @@ class CharacterViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         let aCollection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         aCollection.showsVerticalScrollIndicator = true
-        aCollection.register(ShowCollectionCell.self, forCellWithReuseIdentifier: ShowCollectionCell().identifier)
+        aCollection.register(CharacterCollectionCell.self, forCellWithReuseIdentifier: CharacterCollectionCell().identifier)
         aCollection.delegate = self
         aCollection.dataSource = self
         aCollection.translatesAutoresizingMaskIntoConstraints = false
@@ -46,9 +46,9 @@ class CharacterViewController: UIViewController {
     func setupConstraints() {
         NSLayoutConstraint.activate([
             aCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            aCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            aCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            aCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            aCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            aCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            aCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }
@@ -62,19 +62,17 @@ extension CharacterViewController: UICollectionViewDelegate, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        guard let cell = aCollectionView.dequeueReusableCell(withReuseIdentifier: ShowCollectionCell().identifier, for: indexPath) as? ShowCollectionCell else { return UICollectionViewCell() }
+        guard let cell = aCollectionView.dequeueReusableCell(withReuseIdentifier: CharacterCollectionCell().identifier, for: indexPath) as? CharacterCollectionCell else { return UICollectionViewCell() }
         cell.configureCellForCharacter(data: viewModel.characterData(index: indexPath.row))
         return cell
         
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: view.frame.width/1, height: view.frame.height/3)
+        CGSize(width: view.frame.width/2.2, height: view.frame.height/3.1)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         let vc = DetailViewController()
         vc.urlDetail = viewModel.characterData(index: indexPath.row).url
         vc.title = viewModel.characterData(index: indexPath.row).name

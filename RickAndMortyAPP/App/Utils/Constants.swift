@@ -15,5 +15,9 @@ struct Constants {
     struct  AlertMessage {
         static let message = "We cannot get data"
     }
+    
+    struct backgroundColor {
+        static let backgroudCell =  "backgroundCell"
+    }
 }
 
