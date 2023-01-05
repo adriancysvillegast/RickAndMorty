@@ -14,6 +14,7 @@ class ShowCollectionCell: UICollectionViewCell {
     private lazy var photoValue: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleToFill
+        view.image = UIImage(systemName: "plus")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
