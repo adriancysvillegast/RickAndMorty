@@ -1,8 +1,7 @@
 # RickAndMorty
 
-Este proyecto aun esta en proceso aun tiene algunos bugs y
-solo estoy obtenido la primera pagina de casi todos los resultados,
-sin embargo con el avance que se lleva pretendo demostrar mis conocimientos en swift, la estructura del proyecto y code style.
+Este proyecto aun esta en proceso, tiene algunos bugs y solo estoy obtenido la primera pagina de casi todos los resultados.
+Sin embargo con el avance que se lleva pretendo demostrar mis conocimientos en swift, la estructura del proyecto y code style.
 
 
 
