@@ -8,6 +8,6 @@
 import Foundation
 
 struct CharacterModel: Codable {
-    let info: InfoModel
-    let results: ResultCharacterModel
+    let info : InfoModel
+    let results: [DetailCharacterModel]
 }

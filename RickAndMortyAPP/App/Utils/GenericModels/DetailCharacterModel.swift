@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ResultCharacterModel: Codable {
+struct DetailCharacterModel: Codable {
     let id: Int
     let name: String
     let status: String
@@ -15,7 +15,7 @@ struct ResultCharacterModel: Codable {
     let type: String
     let gender: String
     let origin: OriginModel
-    let location: LocationModel
+    let location: CharacterLocationModel
     let image: String
     let episode: [String]
     let url: String
