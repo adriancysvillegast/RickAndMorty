@@ -41,6 +41,22 @@ class DetailViewController: UIViewController {
         return viewModel
     }()
     
+    private lazy var aView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(named: Constants.backgroundColor.backgroudCell)
+        view.layer.cornerRadius = 5
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private lazy var aViewDetails: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        view.layer.cornerRadius = 5
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private lazy var photoValue: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleToFill
@@ -48,27 +64,51 @@ class DetailViewController: UIViewController {
         return view
     }()
     
-    private lazy var nameValue: UILabel = {
+    private lazy var statusTitle: UILabel = {
         let label = UILabel()
-        label.backgroundColor = UIColor(white: 1, alpha: 0.5)
-        label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        label.textAlignment = .left
+        label.text = "Status:"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var statusValue: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var speciesTitle: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.text = "Species:"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private lazy var speciesValue: UILabel = {
         let label = UILabel()
-        label.backgroundColor = UIColor(white: 1, alpha: 0.5)
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 20, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
      
+    private lazy var genderTitle: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.text = "Gender:"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private lazy var genderValue: UILabel = {
         let label = UILabel()
-        label.backgroundColor = UIColor(white: 1, alpha: 0.5)
         label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 20, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -79,7 +119,7 @@ class DetailViewController: UIViewController {
         let label = UILabel()
         label.textAlignment = .left
         label.text = "Origin:"
-        label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -87,6 +127,7 @@ class DetailViewController: UIViewController {
     private lazy var originValue: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
+        label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 20, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -96,7 +137,16 @@ class DetailViewController: UIViewController {
         let label = UILabel()
         label.textAlignment = .left
         label.text = "Location:"
-        label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var locationValues: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.numberOfLines = 2
+        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -104,7 +154,8 @@ class DetailViewController: UIViewController {
     private lazy var locationValue: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
+        label.numberOfLines = 2
+        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -112,8 +163,8 @@ class DetailViewController: UIViewController {
     private lazy var residentsTitle: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.text = "Residents:"
-        label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        label.text = "Residents of "
+        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -156,47 +207,92 @@ class DetailViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
-        [photoValue, nameValue, speciesValue, genderValue, originTitle, originValue, locationTitle, locationValue, residentsTitle, aCollectionView, spinner].forEach {
+        
+        [aView, aCollectionView, spinner].forEach {
             containerView.addSubview($0)
+        }
+        
+        [photoValue, aViewDetails, residentsTitle, locationValue].forEach {
+            aView.addSubview($0)
+        }
+        
+        [statusTitle, statusValue, speciesTitle, speciesValue, genderTitle, genderValue, originTitle, originValue,locationTitle, locationValues].forEach {
+            aViewDetails.addSubview($0)
         }
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            photoValue.topAnchor.constraint(equalTo: containerView.topAnchor),
-            photoValue.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-            photoValue.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            photoValue.heightAnchor.constraint(equalToConstant: 500),
+        
+            aView.topAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.topAnchor),
+            aView.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            aView.trailingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            aView.heightAnchor.constraint(equalToConstant: 600),
             
-            nameValue.leadingAnchor.constraint(equalTo: photoValue.leadingAnchor, constant: 10),
-            nameValue.topAnchor.constraint(equalTo: photoValue.bottomAnchor, constant: -120),
             
-            speciesValue.topAnchor.constraint(equalTo: nameValue.bottomAnchor, constant: 10),
-            speciesValue.leadingAnchor.constraint(equalTo: photoValue.leadingAnchor, constant: 10),
+            photoValue.topAnchor.constraint(equalTo: aView.topAnchor, constant: 10),
+            photoValue.leadingAnchor.constraint(equalTo: aView.leadingAnchor, constant: 10),
+            photoValue.trailingAnchor.constraint(equalTo: aView.trailingAnchor, constant: -10),
+            photoValue.bottomAnchor.constraint(equalTo: aView.bottomAnchor, constant: -10),
             
-            genderValue.topAnchor.constraint(equalTo: speciesValue.bottomAnchor, constant: 10),
-            genderValue.leadingAnchor.constraint(equalTo: photoValue.leadingAnchor, constant: 10),
+            aViewDetails.topAnchor.constraint(equalTo: photoValue.topAnchor, constant: 375),
+            aViewDetails.leadingAnchor.constraint(equalTo: photoValue.leadingAnchor, constant: 10),
+            aViewDetails.trailingAnchor.constraint(equalTo: photoValue.trailingAnchor, constant: -10),
+            aViewDetails.bottomAnchor.constraint(equalTo: photoValue.bottomAnchor, constant: -10),
             
-            originTitle.topAnchor.constraint(equalTo: photoValue.bottomAnchor, constant: 10),
-            originTitle.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 5),
+            statusTitle.topAnchor.constraint(equalTo: aViewDetails.topAnchor, constant: 10),
+            statusTitle.leadingAnchor.constraint(equalTo: aViewDetails.leadingAnchor, constant: 10),
+            statusTitle.widthAnchor.constraint(equalToConstant: 90),
             
-            originValue.topAnchor.constraint(equalTo: originTitle.bottomAnchor, constant: 5),
-            originValue.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+            statusValue.topAnchor.constraint(equalTo: statusTitle.topAnchor),
+            statusValue.leadingAnchor.constraint(equalTo: statusTitle.trailingAnchor, constant: 5),
+            statusValue.trailingAnchor.constraint(equalTo: aViewDetails.trailingAnchor, constant: -10),
             
-            locationTitle.topAnchor.constraint(equalTo: originValue.bottomAnchor, constant: 10),
-            locationTitle.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+            speciesTitle.topAnchor.constraint(equalTo: statusTitle.bottomAnchor, constant: 10),
+            speciesTitle.leadingAnchor.constraint(equalTo: aViewDetails.leadingAnchor, constant: 10),
+            speciesTitle.widthAnchor.constraint(equalToConstant: 90),
             
-            locationValue.topAnchor.constraint(equalTo: locationTitle.bottomAnchor, constant: 5),
-            locationValue.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant:  10),
+            speciesValue.topAnchor.constraint(equalTo: speciesTitle.topAnchor),
+            speciesValue.leadingAnchor.constraint(equalTo: speciesTitle.trailingAnchor, constant: 5),
+            speciesValue.trailingAnchor.constraint(equalTo: aViewDetails.trailingAnchor, constant: -10),
             
-            residentsTitle.topAnchor.constraint(equalTo: locationValue.bottomAnchor, constant: 10),
+            genderTitle.topAnchor.constraint(equalTo: speciesTitle.bottomAnchor, constant: 10),
+            genderTitle.leadingAnchor.constraint(equalTo: aViewDetails.leadingAnchor, constant: 10),
+            genderTitle.widthAnchor.constraint(equalToConstant: 90),
+            
+            genderValue.topAnchor.constraint(equalTo: genderTitle.topAnchor),
+            genderValue.leadingAnchor.constraint(equalTo: genderTitle.trailingAnchor, constant: 5),
+            genderValue.trailingAnchor.constraint(equalTo: aViewDetails.trailingAnchor, constant: -10),
+            
+            originTitle.topAnchor.constraint(equalTo: genderTitle.bottomAnchor, constant: 10),
+            originTitle.leadingAnchor.constraint(equalTo: aViewDetails.leadingAnchor, constant: 10),
+            originTitle.widthAnchor.constraint(equalToConstant: 90),
+            
+            originValue.topAnchor.constraint(equalTo: originTitle.topAnchor),
+            originValue.leadingAnchor.constraint(equalTo: originTitle.trailingAnchor, constant: 5),
+            originValue.trailingAnchor.constraint(equalTo: aViewDetails.trailingAnchor, constant: -10),
+            
+            locationTitle.topAnchor.constraint(equalTo: originTitle.bottomAnchor, constant: 10),
+            locationTitle.leadingAnchor.constraint(equalTo: aViewDetails.leadingAnchor, constant: 10),
+            locationTitle.widthAnchor.constraint(equalToConstant: 90),
+            
+            locationValues.topAnchor.constraint(equalTo: locationTitle.topAnchor),
+            locationValues.leadingAnchor.constraint(equalTo: locationTitle.trailingAnchor, constant: 5),
+            locationValues.trailingAnchor.constraint(equalTo: aViewDetails.trailingAnchor, constant: -10),
+            
+            
+            residentsTitle.topAnchor.constraint(equalTo: aView.bottomAnchor, constant: 10),
             residentsTitle.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant:  10),
-            
-            aCollectionView.topAnchor.constraint(equalTo: residentsTitle.bottomAnchor, constant: 5),
+
+            locationValue.topAnchor.constraint(equalTo: residentsTitle.topAnchor),
+            locationValue.leadingAnchor.constraint(equalTo: residentsTitle.trailingAnchor),
+            locationValue.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+
+            aCollectionView.topAnchor.constraint(equalTo: residentsTitle.bottomAnchor, constant: 10),
             aCollectionView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
             aCollectionView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
             aCollectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 10),
-            
+
             spinner.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             spinner.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         ])
@@ -207,7 +303,7 @@ class DetailViewController: UIViewController {
 extension DetailViewController: DetailViewModelDelegate {
     func hiddenProperty() {
         DispatchQueue.main.async {
-            [self.photoValue, self.nameValue, self.speciesValue, self.genderValue, self.originTitle, self.originValue, self.locationTitle, self.locationValue, self.aCollectionView, self.residentsTitle].forEach {
+            [self.photoValue,self.statusTitle, self.statusValue, self.speciesTitle, self.speciesValue, self.genderTitle, self.genderValue, self.originTitle, self.originValue, self.locationValue, self.aCollectionView, self.residentsTitle, self.aViewDetails, self.aView, self.locationTitle, self.locationValues].forEach {
                 $0.isHidden = true
             }
         }
@@ -216,7 +312,7 @@ extension DetailViewController: DetailViewModelDelegate {
     
     func showProperty() {
         DispatchQueue.main.async {
-            [self.photoValue, self.nameValue, self.speciesValue, self.genderValue, self.originTitle, self.originValue, self.self.locationTitle, self.locationValue, self.self.aCollectionView,self.residentsTitle].forEach {
+            [self.photoValue,self.statusTitle, self.statusValue, self.speciesTitle, self.speciesValue, self.genderTitle, self.genderValue, self.originTitle, self.originValue, self.locationValue, self.aCollectionView, self.residentsTitle, self.aViewDetails, self.aView, self.locationTitle, self.locationValues].forEach {
                 $0.isHidden = false
             }
         }
@@ -233,11 +329,12 @@ extension DetailViewController: DetailViewModelDelegate {
         DispatchQueue.main.async {
             guard let url = URL(string: data.image) else { return }
             self.photoValue.loadImage(at: url)
-            self.nameValue.text = data.name
+            self.statusValue.text = data.status
             self.speciesValue.text = data.species
             self.genderValue.text = data.gender
             self.originValue.text = data.origin.name
             self.locationValue.text = data.location.name
+            self.locationValues.text = data.location.name
         }
     }
 }
@@ -264,7 +361,7 @@ extension DetailViewController:  UICollectionViewDataSource, UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: aCollectionView.frame.width/3, height: aCollectionView.frame.height/1.5)
+        return CGSize(width: aCollectionView.frame.width/2.3, height: aCollectionView.frame.height/1)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
