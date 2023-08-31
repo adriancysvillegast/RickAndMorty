@@ -23,6 +23,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
        let label = UILabel()
         label.textAlignment = .left
         label.textColor = .label
+        label.numberOfLines = 1
         label.font = .systemFont(ofSize: 10, weight: .semibold)
         return label
     }()
@@ -31,6 +32,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
        let label = UILabel()
         label.textAlignment = .left
         label.textColor = .secondaryLabel
+        label.numberOfLines = 1
         label.font = .systemFont(ofSize: 10, weight: .semibold)
         return label
     }()
