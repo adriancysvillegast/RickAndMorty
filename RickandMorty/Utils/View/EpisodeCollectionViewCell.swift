@@ -1,20 +1,20 @@
 //
-//  TitleViewCell.swift
+//  EpisodeCollectionViewCell.swift
 //  RickandMorty
 //
-//  Created by Adriancys Jesus Villegas Toro on 31/8/23.
+//  Created by Adriancys Jesus Villegas Toro on 1/9/23.
 //
 
 import UIKit
 
-class TitleViewCell: UICollectionViewCell {
+class EpisodeCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
-    static let identifier = "TitleViewCell"
+    static let identifier = "EpisodeCollectionViewCell"
     
     private lazy var aImageCover: UIImageView = {
         let aImage = UIImageView()
         aImage.contentMode = .scaleAspectFill
-        aImage.image = UIImage(named: "location-cover")
+        aImage.image = UIImage(named: "episodes")
         return aImage
     }()
     
@@ -22,13 +22,13 @@ class TitleViewCell: UICollectionViewCell {
        let label = UILabel()
         label.textAlignment = .left
         label.textColor = .white
-        label.numberOfLines = 1
+        label.numberOfLines = 2
         label.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
         label.font = .systemFont(ofSize: 18, weight: .semibold)
         return label
     }()
     
-    private lazy var type: UILabel = {
+    private lazy var airDate: UILabel = {
        let label = UILabel()
         label.textAlignment = .left
         label.textColor = .white
@@ -41,10 +41,10 @@ class TitleViewCell: UICollectionViewCell {
     // MARK: - setupView
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .systemBackground
+        contentView.backgroundColor = .red
         contentView.addSubview(aImageCover)
         contentView.addSubview(name)
-        contentView.addSubview(type)
+        contentView.addSubview(airDate)
         contentView.clipsToBounds = true
     }
     
@@ -55,18 +55,18 @@ class TitleViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         aImageCover.frame = contentView.bounds
-        name.frame = CGRect(x: 10, y: frame.height - 60 , width: contentView.frame.width-20, height: 25)
-        type.frame = CGRect(x: 10, y: frame.height - 35 , width: contentView.frame.width-20, height: 20)
+        name.frame = CGRect(x: 10, y: frame.height - 70 , width: contentView.frame.width-20, height: 45)
+        airDate.frame = CGRect(x: 10, y: frame.height - 25 , width: contentView.frame.width-20, height: 20)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         name.text = nil
-        type.text = nil
+        airDate.text = nil
     }
     // MARK: - Methods
-    func configure(with location: LocationViewModelCell) {
-        self.name.text = location.name
-        self.type.text = location.type
+    func configure(with episode: EpisodeViewModelCell) {
+        self.name.text = episode.name
+        self.airDate.text = episode.airDate
     }
 }

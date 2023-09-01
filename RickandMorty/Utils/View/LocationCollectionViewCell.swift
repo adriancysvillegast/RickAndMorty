@@ -1,21 +1,20 @@
 //
-//  CharacterCollectionViewCell.swift
+//  TitleViewCell.swift
 //  RickandMorty
 //
 //  Created by Adriancys Jesus Villegas Toro on 31/8/23.
 //
 
 import UIKit
-import SDWebImage
 
-class CharacterCollectionViewCell: UICollectionViewCell {
-    
+class LocationCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
-    static let identifier = "CharacterCollectionViewCell"
+    static let identifier = "TitleViewCell"
     
     private lazy var aImageCover: UIImageView = {
         let aImage = UIImageView()
-        aImage.contentMode = .scaleAspectFit
+        aImage.contentMode = .scaleAspectFill
+        aImage.image = UIImage(named: "location-cover")
         return aImage
     }()
     
@@ -29,7 +28,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var species: UILabel = {
+    private lazy var type: UILabel = {
        let label = UILabel()
         label.textAlignment = .left
         label.textColor = .white
@@ -42,10 +41,10 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     // MARK: - setupView
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.backgroundColor = .systemBackground
         contentView.addSubview(aImageCover)
         contentView.addSubview(name)
-        contentView.addSubview(species)
-        
+        contentView.addSubview(type)
         contentView.clipsToBounds = true
     }
     
@@ -57,20 +56,17 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         aImageCover.frame = contentView.bounds
         name.frame = CGRect(x: 10, y: frame.height - 60 , width: contentView.frame.width-20, height: 25)
-        species.frame = CGRect(x: 10, y: frame.height - 35 , width: contentView.frame.width-20, height: 20)
+        type.frame = CGRect(x: 10, y: frame.height - 35 , width: contentView.frame.width-20, height: 20)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        aImageCover.image = nil
         name.text = nil
-        species.text = nil
+        type.text = nil
     }
     // MARK: - Methods
-    func configure(with character: CharacterViewModelCell) {
-        self.name.text = character.name
-        self.species.text = character.species
-        self.aImageCover.sd_setImage(with: character.artWork, placeholderImage: UIImage(systemName: "photo"))
+    func configure(with location: LocationViewModelCell) {
+        self.name.text = location.name
+        self.type.text = location.type
     }
-    
 }

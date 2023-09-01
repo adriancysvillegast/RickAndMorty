@@ -53,7 +53,8 @@ class BrowserViewModel {
                         id: $0.id,
                         name: $0.name,
                         species: $0.species,
-                        url: URL(string: $0.image)
+                        artWork: URL(string: $0.image),
+                        urlInfo: $0.url
                     )
                 }
                 self.dataBrowser.append(.characters(model: charactersSectionType))
@@ -90,7 +91,6 @@ class BrowserViewModel {
                 completion(.failure(error))
             }
         })
-        
     }
 
     
@@ -100,7 +100,9 @@ class BrowserViewModel {
 struct CharacterViewModelCell {
     let id: Int
     let name, species: String
-    let url: URL?
+    let artWork: URL?
+    let urlInfo: String
+    
 }
 
 // MARK: - LocationViewModelCell

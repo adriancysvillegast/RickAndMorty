@@ -10,9 +10,10 @@ import UIKit
 class BrowseViewController: UIViewController {
     
     // MARK: - Properties
-    private var characters: [CharacterViewModelCell] = []
-    //    private var nextPage: String?
+    
     private var browserData: [BrowseSectionType] = []
+    
+    private var character: [CharacterResponse] = []
     
     private lazy var viewModel: BrowserViewModel = {
         let viewModel = BrowserViewModel()
@@ -24,17 +25,18 @@ class BrowseViewController: UIViewController {
                                            collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { sections, _ in
             return BrowseViewController.createSectionLayout(with: sections)
         }))
-        aCollection.backgroundColor = .brown
+        aCollection.backgroundColor = .systemBackground
         aCollection.delegate = self
         aCollection.dataSource = self
         aCollection.register(CharacterCollectionViewCell.self,
                              forCellWithReuseIdentifier: CharacterCollectionViewCell.identifier)
-        aCollection.register(TitleViewCell.self,
-                             forCellWithReuseIdentifier: TitleViewCell.identifier)
+        aCollection.register(LocationCollectionViewCell.self,
+                             forCellWithReuseIdentifier: LocationCollectionViewCell.identifier)
+        aCollection.register(EpisodeCollectionViewCell.self,
+                             forCellWithReuseIdentifier: EpisodeCollectionViewCell.identifier)
         aCollection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         return aCollection
     }()
-    
     
     // MARK: - LifeCycle
     
@@ -52,7 +54,7 @@ class BrowseViewController: UIViewController {
     // MARK: - Methods
     
     private func setupView() {
-        view.backgroundColor = .cyan
+        view.backgroundColor = .systemBackground
         view.addSubview(aCollectionView)
     }
     
@@ -67,10 +69,10 @@ class BrowseViewController: UIViewController {
                 case .failure(let error):
                     self?.showAlert(message: error)
                 }
-                
             }
         }
     }
+    
     
     private func showAlert(message: Error) {
         let alert = UIAlertController(title: "Error", message: message.localizedDescription, preferredStyle: .alert)
@@ -114,17 +116,38 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             
         case .location(let location):
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: TitleViewCell.identifier, for: indexPath) as? TitleViewCell else {
+                withReuseIdentifier: LocationCollectionViewCell.identifier, for: indexPath) as? LocationCollectionViewCell else {
                 return UICollectionViewCell()
             }
             let location = location[indexPath.row]
             cell.configure(with: location)
             return cell
             
-        case .episode(let episode):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as UICollectionViewCell
-            cell.backgroundColor = .red
+        case .episode(let episodes):
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: EpisodeCollectionViewCell.identifier, for: indexPath) as? EpisodeCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            let episode = episodes[indexPath.row]
+            cell.configure(with: episode)
             return cell
+ 
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let section = browserData[indexPath.section]
+        switch section {
+        case .characters(let model):
+            let vc = CharacterViewController(character: model[indexPath.row])
+            vc.title = model[indexPath.row].name
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        case .location(let location): break
+            
+        case .episode(let episode): break
+            
         }
     }
     
@@ -195,12 +218,19 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             
             let groupHorizontal = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.8),
-                    heightDimension: .absolute(100))
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(300))
                 ,subitem: item,
                 count: 1
             )
-            let section = NSCollectionLayoutSection(group: groupHorizontal)
+            let groupVertical = NSCollectionLayoutGroup.vertical(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(0.8),
+                    heightDimension: .absolute(300)),
+                subitem: groupHorizontal,
+                count: 2)
+            
+            let section = NSCollectionLayoutSection(group: groupVertical)
             section.orthogonalScrollingBehavior = .groupPaging
             return section
             
