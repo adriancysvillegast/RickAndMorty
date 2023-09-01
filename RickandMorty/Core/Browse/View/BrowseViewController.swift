@@ -10,8 +10,9 @@ import UIKit
 class BrowseViewController: UIViewController {
     
     // MARK: - Properties
-    private var characters: [CharacterResponse] = []
-//    private var nextPage: String?
+    private var characters: [CharacterViewModelCell] = []
+    //    private var nextPage: String?
+    private var browserData: [BrowseSectionType] = []
     
     private lazy var viewModel: BrowserViewModel = {
         let viewModel = BrowserViewModel()
@@ -20,12 +21,16 @@ class BrowseViewController: UIViewController {
     
     private lazy var aCollectionView: UICollectionView = {
         let aCollection = UICollectionView(frame: .zero,
-    collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { sections, _ in
+                                           collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { sections, _ in
             return BrowseViewController.createSectionLayout(with: sections)
-    }))
+        }))
         aCollection.backgroundColor = .brown
         aCollection.delegate = self
         aCollection.dataSource = self
+        aCollection.register(CharacterCollectionViewCell.self,
+                             forCellWithReuseIdentifier: CharacterCollectionViewCell.identifier)
+        aCollection.register(TitleViewCell.self,
+                             forCellWithReuseIdentifier: TitleViewCell.identifier)
         aCollection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         return aCollection
     }()
@@ -52,15 +57,17 @@ class BrowseViewController: UIViewController {
     }
     
     func fetchCharacters() {
-        viewModel.fetchData { [weak self] result in
+        viewModel.fechData { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let characters):
-//                    self?.nextPage = characters.info.next
-                    self?.characters = characters.results
+                case .success(let model):
+//                    print("MODEL: \(model)")
+                    self?.browserData = model
+                    self?.aCollectionView.reloadData()
                 case .failure(let error):
                     self?.showAlert(message: error)
                 }
+                
             }
         }
     }
@@ -71,38 +78,61 @@ class BrowseViewController: UIViewController {
         present(alert, animated: true)
     }
     
-    
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
 extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return browserData.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        
+        let section = browserData[section]
+        switch section {
+        case .characters(let model):
+            return model.count
+        case .location(let model):
+            return model.count
+        case .episode(model: let model):
+            return model.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as UICollectionViewCell
-        switch indexPath.section {
-        case 0:
+        let section = browserData[indexPath.section]
+        switch section {
+        case .characters(let characters):
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: CharacterCollectionViewCell.identifier, for: indexPath) as? CharacterCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            cell.configure(with: characters[indexPath.row])
+            return cell
+            
+        case .location(let location):
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: TitleViewCell.identifier, for: indexPath) as? TitleViewCell else {
+                return UICollectionViewCell()
+            }
+            let location = location[indexPath.row]
+            cell.configure(with: location)
+            return cell
+            
+        case .episode(let episode):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as UICollectionViewCell
             cell.backgroundColor = .red
-        case 1:
-            cell.backgroundColor = .green
-        case 2:
-            cell.backgroundColor = .purple
-        default:
-            cell.backgroundColor = .systemPink
+            return cell
         }
-        return cell
     }
     
     static func createSectionLayout(with section: Int) -> NSCollectionLayoutSection {
+        
         switch section{
         case 0:
-//            CHARACTERS
+            //            CHARACTERS
             let item = NSCollectionLayoutItem(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
@@ -120,7 +150,7 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             )
             
             groupVertical.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 5, bottom: 2, trailing: 5)
-           
+            
             let horizontalGroup = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(0.9),
@@ -133,6 +163,7 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             return section
             
         case 1:
+            //            LOCATION
             let item = NSCollectionLayoutItem(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
@@ -146,13 +177,14 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
                     heightDimension: .absolute(190)),
                 subitem: item,
                 count: 1)
-
+            
             horizontalGroup.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
             let section = NSCollectionLayoutSection(group: horizontalGroup)
             section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
             return section
-
+            
         case 2:
+            //            EPISODES
             let item = NSCollectionLayoutItem(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
@@ -190,7 +222,7 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             )
             
             groupVertical.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 5, bottom: 2, trailing: 5)
-           
+            
             let horizontalGroup = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(0.9),
@@ -201,8 +233,6 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let section = NSCollectionLayoutSection(group: horizontalGroup)
             section.orthogonalScrollingBehavior = .groupPaging
             return section
-            
-            
         }
         
     }

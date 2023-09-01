@@ -31,5 +31,34 @@ class BrowseService {
                 }
             }
     }
+    
+    func getLocations(completion: @escaping (Result<AllLocationResponse, Error>) -> Void) {
+        APIManager.shared.get(
+            url: URL(string: "\(baseURL)/location"),
+            expecting: AllLocationResponse.self) { result in
+                switch result {
+                case .success(let model):
+                    completion(.success(model))
+                case .failure(let error) :
+                    print(error)
+                    completion(.failure(error))
+                }
+            }
+    }
+    
+    func getEpisodes(completion: @escaping (Result<AllEpisodeResponse, Error>) -> Void) {
+        APIManager.shared.get(
+            url: URL(string: "\(baseURL)/episode/"),
+            expecting: AllEpisodeResponse.self) { result in
+                switch result {
+                case .success(let model):
+                    completion(.success(model))
+                case .failure(let error) :
+                    print(error)
+                    completion(.failure(error))
+                }
+            }
+    }
+    
 }
 

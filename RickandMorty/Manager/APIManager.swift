@@ -50,7 +50,6 @@ final class APIManager {
                     print(error)
                     completion(.failure(error))
                 }
-
             }
             task.resume()
         }
