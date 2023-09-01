@@ -34,6 +34,9 @@ class BrowseViewController: UIViewController {
                              forCellWithReuseIdentifier: LocationCollectionViewCell.identifier)
         aCollection.register(EpisodeCollectionViewCell.self,
                              forCellWithReuseIdentifier: EpisodeCollectionViewCell.identifier)
+        aCollection.register(TitleHeaderCollectionReusableView.self,
+                             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                             withReuseIdentifier: TitleHeaderCollectionReusableView.identifier)
         aCollection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         return aCollection
     }()
@@ -63,7 +66,7 @@ class BrowseViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let model):
-//                    print("MODEL: \(model)")
+                    //                    print("MODEL: \(model)")
                     self?.browserData = model
                     self?.aCollectionView.reloadData()
                 case .failure(let error):
@@ -131,8 +134,19 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let episode = episodes[indexPath.row]
             cell.configure(with: episode)
             return cell
- 
+            
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: TitleHeaderCollectionReusableView.identifier,
+            for: indexPath) as? TitleHeaderCollectionReusableView else {
+            return UICollectionReusableView()
+        }
+        header.configure(with: browserData[indexPath.section].title)
+        return header
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -152,6 +166,15 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     static func createSectionLayout(with section: Int) -> NSCollectionLayoutSection {
+        
+        let supplementaryView = [
+            NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(50)),
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top)
+        ]
         
         switch section{
         case 0:
@@ -183,6 +206,7 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             
             let section = NSCollectionLayoutSection(group: horizontalGroup)
             section.orthogonalScrollingBehavior = .groupPaging
+            section.boundarySupplementaryItems = supplementaryView
             return section
             
         case 1:
@@ -204,6 +228,7 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             horizontalGroup.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
             let section = NSCollectionLayoutSection(group: horizontalGroup)
             section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+            section.boundarySupplementaryItems = supplementaryView
             return section
             
         case 2:
@@ -232,6 +257,7 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             
             let section = NSCollectionLayoutSection(group: groupVertical)
             section.orthogonalScrollingBehavior = .groupPaging
+            section.boundarySupplementaryItems = supplementaryView
             return section
             
         default :
