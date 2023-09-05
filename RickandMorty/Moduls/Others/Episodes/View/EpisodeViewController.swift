@@ -63,7 +63,7 @@ class EpisodeViewController: UIViewController {
     // MARK: - setUpView
     
     private func setUpView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .black
         view.addSubview(aCollectionView)
     }
     

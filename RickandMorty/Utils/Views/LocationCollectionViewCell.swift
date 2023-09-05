@@ -41,7 +41,7 @@ class LocationCollectionViewCell: UICollectionViewCell {
     // MARK: - setupView
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .systemBackground
+        contentView.backgroundColor = .black
         contentView.addSubview(aImageCover)
         contentView.addSubview(name)
         contentView.addSubview(type)

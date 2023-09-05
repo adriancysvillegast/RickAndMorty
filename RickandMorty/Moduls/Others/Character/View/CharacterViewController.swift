@@ -60,7 +60,7 @@ class CharacterViewController: UIViewController {
     
     // MARK: - SetUpView
     private func setUpView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .black
         view.addSubview(aCollectionView)
     }
     

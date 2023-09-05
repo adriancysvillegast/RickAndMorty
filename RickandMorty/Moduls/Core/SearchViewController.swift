@@ -32,7 +32,7 @@ class SearchViewController: UIViewController  {
     
     // MARK: - SetUpView
     private func setUpView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .black
         navigationItem.searchController = aSearchBar
     }
     

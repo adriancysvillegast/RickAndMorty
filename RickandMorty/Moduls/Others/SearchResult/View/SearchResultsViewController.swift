@@ -24,7 +24,7 @@ class SearchResultsViewController: UIViewController {
         aTableView.dataSource = self
         aTableView.isHidden = true
         aTableView.register(CharactersTableViewCell.self, forCellReuseIdentifier: CharactersTableViewCell.identifier)
-        aTableView.backgroundColor = .systemBackground
+        aTableView.backgroundColor = .black
         aTableView.rowHeight = 70
         return aTableView
     }()
@@ -45,7 +45,7 @@ class SearchResultsViewController: UIViewController {
     // MARK: - Methods
     
     private func setUpView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .black
         view.addSubview(aTableView)
     }
     

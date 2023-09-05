@@ -25,7 +25,7 @@ class BrowseViewController: UIViewController {
                                            collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { sections, _ in
             return BrowseViewController.createSectionLayout(with: sections)
         }))
-        aCollection.backgroundColor = .systemBackground
+        aCollection.backgroundColor = .black
         aCollection.delegate = self
         aCollection.dataSource = self
         aCollection.register(CharacterCollectionViewCell.self,
@@ -57,7 +57,7 @@ class BrowseViewController: UIViewController {
     // MARK: - Methods
     
     private func setupView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .black
         view.addSubview(aCollectionView)
     }
     
