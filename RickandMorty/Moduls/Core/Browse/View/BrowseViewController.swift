@@ -76,7 +76,6 @@ class BrowseViewController: UIViewController {
         }
     }
     
-    
     private func showAlert(message: Error) {
         let alert = UIAlertController(title: "Error", message: message.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -158,10 +157,16 @@ extension BrowseViewController: UICollectionViewDelegate, UICollectionViewDataSo
             vc.title = model[indexPath.row].name
             vc.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(vc, animated: true)
-        case .location(let location): break
-            
-        case .episode(let episode): break
-            
+        case .location(let location):
+            let vc = LocationViewController(location: location[indexPath.row])
+            vc.title = location[indexPath.row].name
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        case .episode(let episode):
+            let vc = EpisodeViewController(episode: episode[indexPath.row])
+            vc.title = episode[indexPath.row].name
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
     

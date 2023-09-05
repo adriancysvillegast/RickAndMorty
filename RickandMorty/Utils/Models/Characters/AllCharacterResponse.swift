@@ -8,7 +8,7 @@
 import Foundation
 
 struct AllCharacterResponse: Codable {
-    let info: Info
+    let info: Info?
     let results: [CharacterResponse]
 }
 
